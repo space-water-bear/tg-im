@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package groups;
+option go_package="./groups";
+
+
+
+service Groups {
+  rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse) {}
+  rpc AddGroupMember(AddGroupMemberRequest) returns (AddGroupMemberResponse) {}
+  rpc RemoveGroupMember(RemoveGroupMemberRequest) returns (RemoveGroupMemberResponse) {}
+  rpc ListGroupMembers(ListGroupMembersRequest) returns (ListGroupMembersResponse) {}
+}
+
+message CreateGroupRequest {
+  string name = 1;
+  int64 creatorId = 2;
+}
+
+message CreateGroupResponse {
+    string groupId = 1;
+    int64 code = 2;
+}
+
+message AddGroupMemberRequest {
+  string groupId = 1;
+  int64 userId = 2;
+}
+
+message AddGroupMemberResponse {
+    int64 code = 1;
+}
+
+message RemoveGroupMemberRequest {
+  string groupId = 1;
+  int64 userId = 2;
+}
+
+message RemoveGroupMemberResponse {
+    int64 code = 1;
+}
+message ListGroupMembersRequest {
+  string groupId = 1;
+}
+
+message ListGroupMembersResponse {
+    repeated int64 members = 1;
+    int64 code = 2;
+}

@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package user;
+option go_package="./user";
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+  string email   = 3;
+}
+
+message RegisterResponse {
+  int32 code = 1;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  int32 code = 1;
+  string token = 2;
+  int64 userId = 3;
+}
+
+message GetInfoRequest {
+  int64 userId = 1;
+}
+
+message GetInfoResponse {
+  int64 userId = 1;
+  string username = 2;
+  string nickname = 3;
+  string email = 4;
+  string avatar = 5;
+  string ip = 6;
+}
+
+message UpdateInfoRequest {
+  int64 userId = 1;
+  string nickname = 2;
+  string email = 3;
+  string avatar = 4;
+}
+
+message UpdateInfoResponse {
+  int32 code = 1;
+}
+
+message DeleteInfoRequest {
+  int64 userId = 1;
+}
+
+message DeleteInfoResponse {
+  int32 code = 1;
+}
+
+message GetListRequest {
+  int32 code = 1;
+  int32 page = 2;
+  int32 pageSize = 3;
+  string username = 4;
+  string email = 5;
+  int32 status = 6;
+}
+
+message GetListResponse {
+  int32 code = 1;
+  repeated GetInfoResponse rows = 2;
+  int32 total = 3;
+}
+
+
+
+service User {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {};
+  rpc Login(LoginRequest) returns (LoginResponse) {};
+  rpc GetInfo(GetInfoRequest) returns (GetInfoResponse) {};
+  rpc UpdateInfo(UpdateInfoRequest) returns (UpdateInfoResponse) {};
+  rpc DeleteInfo(DeleteInfoRequest) returns (DeleteInfoResponse) {};
+  rpc GetList(GetListRequest) returns (GetListResponse) {};
+}

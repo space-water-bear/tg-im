@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package friends;
+option go_package="./friends";
+
+message FriendInfo {
+  int64 friendId = 1;
+  string username = 2;
+  string nickname = 3;
+  string email = 4;
+  string avatar = 5;
+}
+
+message GetFriendsListRequest {
+    int64 userId = 1;
+}
+
+message GetFriendsListResponse {
+    repeated FriendInfo friends = 1;
+}
+
+message GetFriendRequest {
+    int64 userId = 1;
+    int64 friendId = 2;
+}
+
+message GetFriendResponse {
+    FriendInfo friend = 1;
+}
+
+message AddFriendRequest {
+    int64 userId = 1;
+    int64 friendId = 2;
+}
+
+message AddFriendResponse {
+    bool success = 1;
+}
+
+message RemoveFriendRequest {
+    int64 userId = 1;
+    int64 friendId = 2;
+}
+
+message RemoveFriendResponse {
+    bool success = 1;
+}
+
+service Friends {
+    rpc GetFriendsList(GetFriendsListRequest) returns (GetFriendsListResponse) {}
+    rpc GetFriend(GetFriendRequest) returns (GetFriendResponse) {}
+    rpc AddFriend(AddFriendRequest) returns (AddFriendResponse) {}
+    rpc RemoveFriend(RemoveFriendRequest) returns (RemoveFriendResponse) {}
+}

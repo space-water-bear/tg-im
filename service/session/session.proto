@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package session;
+option go_package="./session";
+
+
+
+service Session {
+  rpc CreateSession (CreateSessionRequest) returns (CreateSessionResponse);
+  rpc CloseSession (CloseSessionRequest) returns (CloseSessionResponse);
+  rpc GetSession (GetSessionRequest) returns (SessionInfo);
+}
+
+message SessionInfo {
+  string sessionId = 1;
+  int64 userId = 2;
+  string deviceId = 3;
+  int64 timestamp = 4;
+}
+
+message CreateSessionRequest {
+  int64 userId = 1;
+  string deviceId = 2;
+}
+
+message CreateSessionResponse {
+  string sessionId = 1;
+  int64 code = 2;
+  string message = 3;
+}
+
+message CloseSessionRequest {
+  string sessionId = 1;
+}
+
+message CloseSessionResponse {
+  int64 code = 1;
+  string message = 2;
+}
+
+message GetSessionRequest {
+  string sessionId = 1;
+}

@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package gateway;
+option go_package="./gateway";
+
+
+service Gateway {
+
+}
+
+
+// 连接请求
+message ConnectRequest {
+  int64 userId = 1; // 用户ID
+  string deviceId = 2; // 设备ID
+}
+
+// 连接响应
+message ConnectResponse {
+  bool success = 1; // 是否成功
+  string sessionId = 2; // 会话ID
+  string message = 3; // 响应消息
+}
+
+// 断开连接请求
+message DisconnectRequest {
+  string sessionId = 1; // 会话ID
+}
+
+// 断开连接响应
+message DisconnectResponse {
+  bool success = 1; // 是否成功
+  string message = 2; // 响应消息
+}
+
+// 发送消息请求
+message SendRequest {
+  string sessionId = 1; // 会话ID
+  int64 receiverId = 2; // 接收者ID (私聊)
+  int64 groupId = 3; // 群组ID (群聊)
+  ChatType chatType = 4; // 聊天类型 (私聊或群聊)
+  MessageContent message_content = 5; // 消息内容
+}
+
+// 发送消息响应
+message SendResponse {
+  int64 code = 1; // 响应码
+  string messageId = 2; // 消息ID
+  string message = 3; // 响应消息
+}
+
+// 接收消息请求
+message ReceiveRequest {
+  string sessionId = 1; // 会话ID
+}
+
+// 消息
+message Message {
+  string messageId = 1; // 消息ID
+  int64 senderId = 2; // 发送者ID
+  int64 receiverId = 3; // 接收者ID (私聊)
+  int64 groupId = 4; // 群组ID (群聊)
+  ChatType chatType = 5; // 聊天类型 (私聊或群聊)
+  MessageContent message_content = 6; // 消息内容
+  int64 timestamp = 7; // 时间戳
+}
+
+// 聊天类型枚举
+enum ChatType {
+  PRIVATE = 0; // 私聊
+  GROUP = 1; // 群聊
+}
+
+// 消息内容
+message MessageContent {
+  MessageType message_type = 1; // 消息类型
+  oneof content {
+    TextMessage text_message = 2;
+    ImageMessage image_message = 3;
+    AudioMessage audio_message = 4;
+    VideoMessage video_message = 5;
+    FileMessage file_message = 6;
+    LocationMessage location_message = 7;
+    MergeMessage merge_message = 8;
+    CommandMessage command_message = 9;
+    RichTextMessage rich_text_message = 10;
+    MarkdownMessage markdown_message = 11;
+  }
+}
+
+// 消息类型枚举
+enum MessageType {
+  TEXT = 0;
+  IMAGE = 1;
+  AUDIO = 2;
+  VIDEO = 3;
+  FILE = 4;
+  LOCATION = 5;
+  MERGE = 6;
+  COMMAND = 7;
+  RICH_TEXT = 8;
+  MARKDOWN = 9;
+}
+
+// 具体的消息类型
+message TextMessage {
+  string text = 1; // 文本内容
+}
+
+message ImageMessage {
+  string url = 1; // 图片URL
+  string thumbnail_url = 2; // 缩略图URL
+}
+
+message AudioMessage {
+  string url = 1; // 音频URL
+  int32 duration = 2; // 时长（秒）
+}
+
+message VideoMessage {
+  string url = 1; // 视频URL
+  string thumbnail_url = 2; // 缩略图URL
+  int32 duration = 3; // 时长（秒）
+}
+
+message FileMessage {
+  string url = 1; // 文件URL
+  string filename = 2; // 文件名
+  int64 size = 3; // 文件大小（字节）
+}
+
+message LocationMessage {
+  double latitude = 1; // 纬度
+  double longitude = 2; // 经度
+  string address = 3; // 地址
+}
+
+message MergeMessage {
+  repeated Message messages = 1; // 要合并的消息列表
+}
+
+message CommandMessage {
+  string command = 1; // 命令
+  map<string, string> parameters = 2; // 参数
+}
+
+message RichTextMessage {
+  string html_content = 1; // HTML内容
+}
+
+message MarkdownMessage {
+  string markdown_content = 1; // Markdown内容
+}

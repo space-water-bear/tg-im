@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package message;
+option go_package = "./message";
+
+enum MessageType {
+  TEXT = 0;
+  IMAGE = 1;
+  AUDIO = 2;
+  VIDEO = 3;
+  FILE = 4;
+  LOCATION = 5;
+  MERGE = 6;
+  COMMAND = 7;
+  RICH_TEXT = 8;
+  MARKDOWN = 9;
+}
+
+enum ChatType {
+  PRIVATE = 0;
+  GROUP = 1;
+}
+
+service Message {
+  rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
+  rpc ReceiveMessage (ReceiveMessageRequest) returns (stream  MessageInfo);
+
+}
+
+message MessageInfo {
+  int64 messageId = 1;
+  int64 senderId = 2;
+  int64 receiverId = 3;
+  string groupId = 4;
+  int64 timestamp = 5;
+  ChatType chatType = 6;
+  MessageContent messageContent = 7;
+}
+
+
+message MessageContent {
+  MessageType message_type = 1;
+  oneof content {
+    TextMsg textMsg = 2;
+    ImageMsg imageMsg = 3;
+    AudioMsg audioMsg = 4;
+    VideoMsg videoMsg = 5;
+    FileMsg fileMsg = 6;
+    LocationMsg locationMsg = 7;
+    MergeForwardMsg mergeMsg = 8;
+    CommandMsg commandMsg = 9;
+    RichTextMsg richTextMsg = 10;
+    MarkdownMsg markdownMsg = 11;
+  }
+}
+
+message TextMsg {
+  string content = 1;
+}
+
+message ImageMsg {
+  string url = 1;
+  string thumbnail_url = 2;
+}
+
+message AudioMsg {
+  string url = 1;
+  int32 duration = 2;
+}
+
+message VideoMsg {
+  string url = 1;
+  string thumbnail_url = 2;
+  int32 duration = 3;
+}
+
+message FileMsg {
+  string url = 1;
+  string filename = 2;
+  int64 size = 3;
+}
+
+message LocationMsg {
+  double latitude = 1;
+  double longitude = 2;
+  string address = 3;
+}
+
+message MergeForwardMsg {
+  repeated MessageInfo messages = 1;
+}
+
+message CommandMsg {
+  string command = 1;
+  map<string, string> parameters = 2;
+}
+
+message RichTextMsg {
+  string html_content = 1;
+}
+
+message MarkdownMsg {
+  string markdown_content = 1;
+}
+
+message SendMessageRequest {
+  int64 senderId = 1;
+  int64 receiverId = 2;
+  int64 groupId = 3;
+  ChatType chatType = 4;
+  MessageContent messageContent = 5;
+}
+
+message SendMessageResponse {
+  int64 code = 1;
+  int64 messageId = 2;
+  string message = 3;
+}
+
+message ReceiveMessageRequest {
+  string user_id = 1;
+}
