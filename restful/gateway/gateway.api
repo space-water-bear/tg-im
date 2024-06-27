@@ -8,9 +8,8 @@ info (
 	version: "1.0.0"
 )
 
-
 // 用户相关
-type (
+type ( // 注册
 	RegisterRequest {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -21,7 +20,7 @@ type (
 	}
 )
 
-type (
+type ( // 登陆
 	LoginRequest {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -32,7 +31,21 @@ type (
 	}
 )
 
-type (
+@server (
+	prefix: /api/v1
+	group:  login
+)
+service gateway {
+	@doc "Register a new user"
+	@handler Register
+	post /register (RegisterRequest) returns (RegisterResponse)
+
+	@doc "Login"
+	@handler Login
+	post /login (LoginRequest) returns (LoginResponse)
+}
+
+type ( // 用户信息
 	UserInfoResponse {
 		UserId   int64  `json:"userId"`
 		Username string `json:"username"`
@@ -43,85 +56,188 @@ type (
 	}
 )
 
-type (
+type ( // 用户-添加
 	AddUserRequest {
 		Username string `json:"username"`
 		Password string `json:"password"`
 		Email    string `json:"email"`
 	}
-	UserAddResponse {
+	AddUserResponse {
 		UserId int64 `json:"userId"`
 	}
 )
 
-type (
+type ( // 用户-更新
 	UpdateUserInfoRequest {
 		UserId   int64  `json:"userId"`
 		Username string `json:"username,omitempty"`
 		Email    string `json:"email,omitempty"`
 	}
-	UserUpdateResponse {
+	UpdateUserResponse {
 		Success bool `json:"success"`
 	}
 )
 
-type (
+type ( // 用户-删除
 	DeleteUserRequest {
 		UserId int64 `json:"userId"`
 	}
-	UserDeleteResponse {
+	DeleteUserResponse {
 		Success bool `json:"success"`
 	}
 )
-
-@server (
-	prefix: /api/v1
-	group:  login
-)
-service user {
-	@doc "Register a new user"
-	@handler Register
-	post /register (RegisterRequest) returns (RegisterResponse)
-
-	@doc "Login"
-	@handler Login
-	post /login (LoginRequest) returns (LoginResponse)
-}
 
 @server (
 	prefix: /api/v1
 	group:  user
 	jwt:    Auth
 )
-service user {
+service gateway {
 	@doc "Get user info"
-	@handler GetUserInfo
+	@handler UserInfo
 	get /user/:id returns (UserInfoResponse)
 
 	@doc "Get user list"
-	@handler List
+	@handler UserList
 	get /user returns (UserListResponse)
 
 	@doc "Add a new user"
-	@handler Add
-	post /user (AddUserRequest) returns (UserAddResponse)
+	@handler UserAdd
+	post /user (AddUserRequest) returns (AddUserResponse)
 
 	@doc "Update user info"
-	@handler Update
-	put /user (UpdateUserInfoRequest) returns (UserUpdateResponse)
+	@handler UserUpdate
+	put /user (UpdateUserInfoRequest) returns (UpdateUserResponse)
 
 	@doc "Update user info"
-	@handler Patch
-	patch /user (UpdateUserInfoRequest) returns (UserUpdateResponse)
+	@handler UserPatch
+	patch /user (UpdateUserInfoRequest) returns (UpdateUserResponse)
 
 	@doc "Delete user"
-	@handler Delete
-	delete /user (DeleteUserRequest) returns (UserDeleteResponse)
+	@handler UserDelete
+	delete /user (DeleteUserRequest) returns (DeleteUserResponse)
 }
 
-
 // 好友相关
+type ( // 好友信息
+	FriendInfoResponse {
+		FriendId int64  `json:"friendId"`
+		Nickname string `json:"nickname"`
+	}
+	FriendListResponse {
+		Friends []FriendInfoResponse `json:"friends"`
+	}
+)
 
+type ( // 好友-添加
+	AddFriendRequest {
+		FriendId int64 `json:"friendId"`
+	}
+	AddFriendResponse {
+		Success bool `json:"success"`
+	}
+)
 
+type ( // 好友-删除
+	DeleteFriendRequest {
+		FriendId int64 `json:"friendId"`
+	}
+	FriendDeleteResponse {
+		Success bool `json:"success"`
+	}
+)
+
+@server (
+	prefix: /api/v1
+	group:  friend
+	jwt:    Auth
+)
+service gateway {
+	@doc "Get friend info"
+	@handler FriendInfo
+	get /friend/:id returns (FriendInfoResponse)
+
+	@doc "Get friend list"
+	@handler FriendList
+	get /friend returns (FriendListResponse)
+
+	@doc "Add a new friend"
+	@handler FriendAdd
+	post /friend (AddFriendRequest) returns (AddFriendResponse)
+
+	@doc "Delete friend"
+	@handler FriendDelete
+	delete /friend (DeleteFriendRequest) returns (FriendDeleteResponse)
+}
 
 // 群组相关
+type ( // 群组信息
+	GroupInfoResponse {
+		GroupId int64  `json:"groupId"`
+		Name    string `json:"name"`
+	}
+	GroupListResponse {
+		Groups []GroupInfoResponse `json:"groups"`
+	}
+)
+
+type ( // 群组-添加
+	AddGroupRequest {
+		GroupId int64  `json:"groupId"`
+		Name    string `json:"name"`
+	}
+	AddGroupResponse {
+		Success bool `json:"success"`
+	}
+)
+
+type ( // 群组-更新
+	UpdateGroupRequest {
+		GroupId int64  `json:"groupId"`
+		Name    string `json:"name"`
+	}
+	UpdateGroupResponse {
+		Success bool `json:"success"`
+	}
+)
+
+type ( // 群组-删除
+	DeleteGroupRequest {
+		GroupId int64 `json:"groupId"`
+	}
+	GroupDeleteResponse {
+		Success bool `json:"success"`
+	}
+)
+
+@server (
+	prefix: /api/v1
+	group:  group
+	jwt:    Auth
+)
+service gateway {
+	@doc "Get group info"
+	@handler GroupInfo
+	get /group/:id returns (GroupInfoResponse)
+
+	@doc "Get group list"
+	@handler GroupList
+	get /group returns (GroupListResponse)
+
+	@doc "Add a new group"
+	@handler GroupAdd
+	post /group (AddGroupRequest) returns (AddGroupResponse)
+
+	@doc "Update group info"
+	@handler GroupUpdate
+	put /group (UpdateGroupRequest) returns (UpdateGroupResponse)
+
+	@doc "Update group info"
+	@handler GroupPatch
+	patch /group (UpdateGroupRequest) returns (UpdateGroupResponse)
+
+	@doc "Delete group"
+	@handler GroupDelete
+	delete /group (DeleteGroupRequest) returns (GroupDeleteResponse)
+}
+

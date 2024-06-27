@@ -1,0 +1,19 @@
+Name: gateway
+Host: 0.0.0.0
+Port: 10000
+
+Log:
+  Level: "debug"
+  Mode: "file"
+  Path: "logs/restful/user"
+
+UserRpc:
+  Target: direct:///localhost:18001
+#  Etcd:
+#    Hosts:
+#      - localhost:2379
+#    Key: user.rpc
+
+Auth:
+  AccessSecret: "123456789"
+  AccessExpire: 360 # 单位：天

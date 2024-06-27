@@ -4,7 +4,11 @@ package handler
 import (
 	"net/http"
 
-	"restful/gateway/internal/svc"
+	friend "im2/restful/gateway/internal/handler/friend"
+	group "im2/restful/gateway/internal/handler/group"
+	login "im2/restful/gateway/internal/handler/login"
+	user "im2/restful/gateway/internal/handler/user"
+	"im2/restful/gateway/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -13,10 +17,135 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// Get friend list
 				Method:  http.MethodGet,
-				Path:    "/from/:name",
-				Handler: GatewayHandler(serverCtx),
+				Path:    "/friend",
+				Handler: friend.FriendListHandler(serverCtx),
+			},
+			{
+				// Add a new friend
+				Method:  http.MethodPost,
+				Path:    "/friend",
+				Handler: friend.FriendAddHandler(serverCtx),
+			},
+			{
+				// Delete friend
+				Method:  http.MethodDelete,
+				Path:    "/friend",
+				Handler: friend.FriendDeleteHandler(serverCtx),
+			},
+			{
+				// Get friend info
+				Method:  http.MethodGet,
+				Path:    "/friend/:id",
+				Handler: friend.FriendInfoHandler(serverCtx),
 			},
 		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/api/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// Get group list
+				Method:  http.MethodGet,
+				Path:    "/group",
+				Handler: group.GroupListHandler(serverCtx),
+			},
+			{
+				// Add a new group
+				Method:  http.MethodPost,
+				Path:    "/group",
+				Handler: group.GroupAddHandler(serverCtx),
+			},
+			{
+				// Update group info
+				Method:  http.MethodPut,
+				Path:    "/group",
+				Handler: group.GroupUpdateHandler(serverCtx),
+			},
+			{
+				// Update group info
+				Method:  http.MethodPatch,
+				Path:    "/group",
+				Handler: group.GroupPatchHandler(serverCtx),
+			},
+			{
+				// Delete group
+				Method:  http.MethodDelete,
+				Path:    "/group",
+				Handler: group.GroupDeleteHandler(serverCtx),
+			},
+			{
+				// Get group info
+				Method:  http.MethodGet,
+				Path:    "/group/:id",
+				Handler: group.GroupInfoHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/api/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// Login
+				Method:  http.MethodPost,
+				Path:    "/login",
+				Handler: login.LoginHandler(serverCtx),
+			},
+			{
+				// Register a new user
+				Method:  http.MethodPost,
+				Path:    "/register",
+				Handler: login.RegisterHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// Get user list
+				Method:  http.MethodGet,
+				Path:    "/user",
+				Handler: user.UserListHandler(serverCtx),
+			},
+			{
+				// Add a new user
+				Method:  http.MethodPost,
+				Path:    "/user",
+				Handler: user.UserAddHandler(serverCtx),
+			},
+			{
+				// Update user info
+				Method:  http.MethodPut,
+				Path:    "/user",
+				Handler: user.UserUpdateHandler(serverCtx),
+			},
+			{
+				// Update user info
+				Method:  http.MethodPatch,
+				Path:    "/user",
+				Handler: user.UserPatchHandler(serverCtx),
+			},
+			{
+				// Delete user
+				Method:  http.MethodDelete,
+				Path:    "/user",
+				Handler: user.UserDeleteHandler(serverCtx),
+			},
+			{
+				// Get user info
+				Method:  http.MethodGet,
+				Path:    "/user/:id",
+				Handler: user.UserInfoHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/api/v1"),
 	)
 }

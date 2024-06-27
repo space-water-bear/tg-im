@@ -4,15 +4,15 @@ import (
 	"flag"
 	"fmt"
 
-	"restful/gateway/internal/config"
-	"restful/gateway/internal/handler"
-	"restful/gateway/internal/svc"
+	"im2/restful/gateway/internal/config"
+	"im2/restful/gateway/internal/handler"
+	"im2/restful/gateway/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/gateway-api.yaml", "the config file")
+var configFile = flag.String("f", "restful/gateway/etc/gateway.yaml", "the config file")
 
 func main() {
 	flag.Parse()
