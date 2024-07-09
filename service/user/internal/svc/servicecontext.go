@@ -1,11 +1,12 @@
 package svc
 
 import (
-	_ "github.com/lib/pq"
+	//_ "github.com/lib/pq"
+	"github.com/SpectatorNan/gorm-zero/gormc/config/pg"
 	"github.com/zeromicro/go-zero/core/stores/redis"
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"im2/service/user/internal/config"
 	"im2/service/user/internal/model"
+	"log"
 )
 
 type ServiceContext struct {
@@ -15,7 +16,10 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	db := sqlx.NewSqlConn("postgres", c.DataSource)
+	db, err := pg.Connect(c.Database)
+	if err != nil {
+		log.Fatal(err)
+	}
 	rds := redis.MustNewRedis(redis.RedisConf{
 		Host: c.Redis.Host,
 		Type: c.Redis.Type,

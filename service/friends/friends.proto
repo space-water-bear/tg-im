@@ -1,9 +1,9 @@
 syntax = "proto3";
 
 package friends;
-option go_package="./friends";
+option go_package = "./friends";
 
-message FriendInfo {
+message FriendInfo {// 好友信息
   int64 friendId = 1;
   string username = 2;
   string nickname = 3;
@@ -11,44 +11,45 @@ message FriendInfo {
   string avatar = 5;
 }
 
-message GetFriendsListRequest {
-    int64 userId = 1;
+message GetFriendsListRequest {// 获取好友列表
+  int64 Page = 1;
+  int64 PageSize = 2;
 }
 
-message GetFriendsListResponse {
-    repeated FriendInfo friends = 1;
+message GetFriendsListResponse {// 好友列表
+  repeated FriendInfo friends = 1;
 }
 
-message GetFriendRequest {
-    int64 userId = 1;
-    int64 friendId = 2;
+message GetFriendRequest {// 获取好友信息
+  int64 userId = 1;
+  int64 friendId = 2;
 }
 
-message GetFriendResponse {
-    FriendInfo friend = 1;
+message GetFriendResponse {// 好友信息
+  FriendInfo friend = 1;
 }
 
-message AddFriendRequest {
-    int64 userId = 1;
-    int64 friendId = 2;
+message AddFriendRequest {// 添加好友
+  int64 userId = 1;
+  int64 friendId = 2;
 }
 
-message AddFriendResponse {
-    bool success = 1;
+message AddFriendResponse {// 添加好友
+  bool success = 1;
 }
 
-message RemoveFriendRequest {
-    int64 userId = 1;
-    int64 friendId = 2;
+message RemoveFriendRequest {// 删除好友
+  int64 userId = 1;
+  int64 friendId = 2;
 }
 
-message RemoveFriendResponse {
-    bool success = 1;
+message RemoveFriendResponse {// 删除好友
+  bool success = 1;
 }
 
 service Friends {
-    rpc GetFriendsList(GetFriendsListRequest) returns (GetFriendsListResponse) {}
-    rpc GetFriend(GetFriendRequest) returns (GetFriendResponse) {}
-    rpc AddFriend(AddFriendRequest) returns (AddFriendResponse) {}
-    rpc RemoveFriend(RemoveFriendRequest) returns (RemoveFriendResponse) {}
+  rpc GetFriendsList(GetFriendsListRequest) returns (GetFriendsListResponse) {}
+  rpc GetFriend(GetFriendRequest) returns (GetFriendResponse) {}
+  rpc AddFriend(AddFriendRequest) returns (AddFriendResponse) {}
+  rpc RemoveFriend(RemoveFriendRequest) returns (RemoveFriendResponse) {}
 }

@@ -8,3 +8,5 @@ goctl api go --api ${BASEPATH}/../restful/user/user.api --dir ${BASEPATH}/../res
 
 #cd ./restful/user/
 #goctl api doc  --dir ../../templates/
+
+goctl api go --api ${BASEPATH}/../restful/gateway/gateway.api --dir ../restful/gateway/ --home="../templates"

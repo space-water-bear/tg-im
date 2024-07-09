@@ -28,22 +28,21 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterResponse, error) {
-	// todo: add your logic here and delete this line
 
 	_, err := l.svcCtx.Model.FindOneByUsername(l.ctx, in.Username)
 	if err == nil {
 		return &user.RegisterResponse{Code: errno.ErrUserExist}, nil
 	}
 
-	count, err := l.svcCtx.Model.FindCountByCondition(l.ctx, "email = '"+in.Email+"'")
-	if count > 0 {
+	_, err = l.svcCtx.Model.FindOneByEmail(l.ctx, in.Email)
+	if err == nil {
 		return &user.RegisterResponse{Code: errno.ErrEmailExist}, nil
 	}
 
 	encodePass, _ := utils.Encrypt(in.Password)
 
 	u := model.Users{Username: in.Username, Password: encodePass, Email: in.Email}
-	_, err = l.svcCtx.Model.Insert(l.ctx, &u)
+	err = l.svcCtx.Model.Insert(l.ctx, nil, &u)
 	if err != nil {
 		fmt.Println("err: ", err)
 		return &user.RegisterResponse{Code: errno.ErrDatabase}, nil

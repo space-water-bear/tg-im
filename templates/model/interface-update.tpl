@@ -1,1 +1,1 @@
-Update(ctx context.Context, {{if .containsIndexCache}}newData{{else}}data{{end}} *{{.upperStartCamelObject}}) error
+Update(ctx context.Context, tx *gorm.DB, data *{{.upperStartCamelObject}}) error

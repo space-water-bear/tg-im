@@ -1,9 +1,16 @@
-func (m *default{{.upperStartCamelObject}}Model) Insert(ctx context.Context, data *{{.upperStartCamelObject}}) (sql.Result,error) {
-	{{if .withCache}}{{.keys}}
-    ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values ({{.expression}})", m.table, {{.lowerStartCamelObject}}RowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, {{.expressionValues}})
-	}, {{.keyValues}}){{else}}query := fmt.Sprintf("insert into %s (%s) values ({{.expression}})", m.table, {{.lowerStartCamelObject}}RowsExpectAutoSet)
-    ret,err:=m.conn.ExecCtx(ctx, query, {{.expressionValues}}){{end}}
-	return ret,err
+
+func (m *default{{.upperStartCamelObject}}Model) Insert(ctx context.Context, tx *gorm.DB, data *{{.upperStartCamelObject}}) error {
+	{{if .withCache}}
+    err := m.ExecCtx(ctx, func(conn *gorm.DB) error {
+		db := conn
+        if tx != nil {
+            db = tx
+        }
+        return db.Save(&data).Error
+	}, m.getCacheKeys(data)...){{else}}db := m.conn
+        if tx != nil {
+            db = tx
+        }
+        err:= db.WithContext(ctx).Save(&data).Error{{end}}
+	return err
 }

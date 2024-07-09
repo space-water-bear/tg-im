@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SSE test</title>
+    <script type="text/javascript">
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        window.addEventListener("DOMContentLoaded", function () {
+            var evsrc = new EventSource("http://localhost:10000/sse?token=" + generateUUID());
+            evsrc.onmessage = function (ev) {
+                var data = JSON.parse(ev.data);
+                console.log(data)
+            }
+            evsrc.onerror = function (ev) {
+                console.log("readyState = " + ev.currentTarget.readyState);
+            }
+        })
+    </script>
+</head>
+<body>
+<h1>SSE test</h1>
+<div>
+
+</div>
+</body>
+</html>

@@ -1,14 +1,27 @@
-func (m *default{{.upperStartCamelObject}}Model) Delete(ctx context.Context, {{.lowerStartCamelPrimaryKey}} {{.dataType}}) error {
-	{{if .withCache}}{{if .containsIndexCache}}data, err:=m.FindOne(ctx, {{.lowerStartCamelPrimaryKey}})
+
+func (m *default{{.upperStartCamelObject}}Model) Delete(ctx context.Context, tx *gorm.DB, {{.lowerStartCamelPrimaryKey}} {{.dataType}}) error {
+	{{if .withCache}}data, err:=m.FindOne(ctx, {{.lowerStartCamelPrimaryKey}})
 	if err!=nil{
+        if errors.Is(err, ErrNotFound) {
+                return nil
+        }
 		return err
 	}
-
-{{end}}	{{.keys}}
-    _, err {{if .containsIndexCache}}={{else}}:={{end}} m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("delete from %s where {{.originalPrimaryKey}} = {{if .postgreSql}}$1{{else}}?{{end}}", m.table)
-		return conn.ExecCtx(ctx, query, {{.lowerStartCamelPrimaryKey}})
-	}, {{.keyValues}}){{else}}query := fmt.Sprintf("delete from %s where {{.originalPrimaryKey}} = {{if .postgreSql}}$1{{else}}?{{end}}", m.table)
-		_,err:=m.conn.ExecCtx(ctx, query, {{.lowerStartCamelPrimaryKey}}){{end}}
+	 err = m.ExecCtx(ctx, func(conn *gorm.DB) error {
+		db := conn
+        if tx != nil {
+            db = tx
+        }
+        return db.Delete(&{{.upperStartCamelObject}}{}, {{.lowerStartCamelPrimaryKey}}).Error
+	}, m.getCacheKeys(data)...){{else}} db := m.conn
+        if tx != nil {
+            db = tx
+        }
+        err:= db.WithContext(ctx).Delete(&{{.upperStartCamelObject}}{}, {{.lowerStartCamelPrimaryKey}}).Error
+	{{end}}
 	return err
+}
+
+func (m *default{{.upperStartCamelObject}}Model) Transaction(ctx context.Context, fn func(db *gorm.DB) error) error {
+    {{if .withCache}}return m.TransactCtx(ctx, fn){{else}} return m.conn.WithContext(ctx).Transaction(fn){{end}}
 }

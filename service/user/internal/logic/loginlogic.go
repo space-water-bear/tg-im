@@ -5,6 +5,7 @@ import (
 	"im2/internal/auth"
 	"im2/internal/errno"
 	"im2/internal/utils"
+	"time"
 
 	"im2/service/user/internal/svc"
 	"im2/service/user/user"
@@ -37,10 +38,16 @@ func (l *LoginLogic) Login(in *user.LoginRequest) (*user.LoginResponse, error) {
 		return &user.LoginResponse{Code: errno.ErrPasswordIncorrect}, nil
 	}
 
-	token, err := auth.GenerateToken(u.Id, u.Username, l.svcCtx.Config.AuthToken.AccessSecret, l.svcCtx.Config.AuthToken.AccessExpire)
+	exp, token, err := auth.GenerateToken(u.Id, u.Username, l.svcCtx.Config.AuthToken.AccessSecret, l.svcCtx.Config.AuthToken.AccessExpire)
 	if err != nil {
 		return &user.LoginResponse{Code: errno.ErrToken}, nil
 	}
 
-	return &user.LoginResponse{Token: token, UserId: u.Id}, nil
+	u.LastLogin = time.Now()
+	err = l.svcCtx.Model.Update(l.ctx, nil, u)
+	if err != nil {
+		return &user.LoginResponse{Code: errno.ErrDatabase}, nil
+	}
+
+	return &user.LoginResponse{Token: token, UserId: u.Id, Expire: exp}, nil
 }

@@ -133,16 +133,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: user.UserPatchHandler(serverCtx),
 			},
 			{
-				// Delete user
-				Method:  http.MethodDelete,
-				Path:    "/user",
-				Handler: user.UserDeleteHandler(serverCtx),
-			},
-			{
 				// Get user info
 				Method:  http.MethodGet,
 				Path:    "/user/:id",
 				Handler: user.UserInfoHandler(serverCtx),
+			},
+			{
+				// Delete user
+				Method:  http.MethodDelete,
+				Path:    "/user/:id",
+				Handler: user.UserDeleteHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

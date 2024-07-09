@@ -2,6 +2,9 @@ package user
 
 import (
 	"context"
+	"fmt"
+	"im2/internal/errno"
+	"im2/service/user/user"
 
 	"im2/restful/gateway/internal/svc"
 	"im2/restful/gateway/internal/types"
@@ -25,7 +28,18 @@ func NewUserDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserDe
 }
 
 func (l *UserDeleteLogic) UserDelete(req *types.DeleteUserRequest) (resp *types.DeleteUserResponse, err error) {
-	// todo: add your logic here and delete this line
 
-	return
+	fmt.Println(req)
+	rest, err := l.svcCtx.UserRpc.DeleteInfo(l.ctx, &user.DeleteInfoRequest{
+		UserId: req.ID,
+	})
+	if err != nil {
+		return nil, errno.NewDefaultError(errno.InternalServerError)
+	} else if rest.Code != 0 {
+		return nil, errno.NewDefaultError(rest.Code)
+	}
+
+	return &types.DeleteUserResponse{
+		Success: true,
+	}, nil
 }

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"im2/internal/errno"
 
 	"im2/service/user/internal/svc"
 	"im2/service/user/user"
@@ -24,7 +25,18 @@ func NewDeleteInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 }
 
 func (l *DeleteInfoLogic) DeleteInfo(in *user.DeleteInfoRequest) (*user.DeleteInfoResponse, error) {
-	// todo: add your logic here and delete this line
+	if in.UserId == 0 {
+		return &user.DeleteInfoResponse{
+			Code: errno.ErrUserNotFound,
+		}, nil
+	}
 
-	return &user.DeleteInfoResponse{}, nil
+	err := l.svcCtx.Model.Delete(l.ctx, nil, in.UserId)
+	if err != nil {
+		return &user.DeleteInfoResponse{
+			Code: errno.ErrDatabase,
+		}, nil
+	}
+
+	return &user.DeleteInfoResponse{Code: errno.OK}, nil
 }

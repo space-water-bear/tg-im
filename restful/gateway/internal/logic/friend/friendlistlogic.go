@@ -24,7 +24,7 @@ func NewFriendListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Friend
 	}
 }
 
-func (l *FriendListLogic) FriendList() (resp *types.FriendListResponse, err error) {
+func (l *FriendListLogic) FriendList(req *types.FriendListRequest) (resp *types.FriendListResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return

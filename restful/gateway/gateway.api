@@ -28,6 +28,7 @@ type ( // 登陆
 	LoginResponse {
 		UserId int64  `json:"userId"`
 		Token  string `json:"token"`
+		Expire int64  `json:"expire"`
 	}
 )
 
@@ -46,13 +47,23 @@ service gateway {
 }
 
 type ( // 用户信息
+	UserInfoRequest {
+		ID string `path:"id"`
+	}
 	UserInfoResponse {
 		UserId   int64  `json:"userId"`
 		Username string `json:"username"`
 		NickName string `json:"nickName"`
 	}
+	UserListRequest {
+		Page     int32  `form:"page,default=1"`
+		Size     int32  `form:"size,default=10"`
+		Username string `form:"username,optional"`
+		NickName string `form:"nickName,optional"`
+	}
 	UserListResponse {
-		Users []UserInfoResponse `json:"users"`
+		Rows  []UserInfoResponse `json:"users"`
+		Total int32              `json:"total"`
 	}
 )
 
@@ -70,8 +81,10 @@ type ( // 用户-添加
 type ( // 用户-更新
 	UpdateUserInfoRequest {
 		UserId   int64  `json:"userId"`
-		Username string `json:"username,omitempty"`
-		Email    string `json:"email,omitempty"`
+		Email    string `json:"email,optional"`
+		NickName string `json:"nickName,optional"`
+		Avatar   string `json:"avatar,optional"`
+		Status   int32  `json:"status,optional"`
 	}
 	UpdateUserResponse {
 		Success bool `json:"success"`
@@ -80,7 +93,7 @@ type ( // 用户-更新
 
 type ( // 用户-删除
 	DeleteUserRequest {
-		UserId int64 `json:"userId"`
+		ID int64 `path:"id"`
 	}
 	DeleteUserResponse {
 		Success bool `json:"success"`
@@ -95,11 +108,11 @@ type ( // 用户-删除
 service gateway {
 	@doc "Get user info"
 	@handler UserInfo
-	get /user/:id returns (UserInfoResponse)
+	get /user/:id (UserInfoRequest) returns (UserInfoResponse)
 
 	@doc "Get user list"
 	@handler UserList
-	get /user returns (UserListResponse)
+	get /user (UserListRequest) returns (UserListResponse)
 
 	@doc "Add a new user"
 	@handler UserAdd
@@ -115,7 +128,7 @@ service gateway {
 
 	@doc "Delete user"
 	@handler UserDelete
-	delete /user (DeleteUserRequest) returns (DeleteUserResponse)
+	delete /user/:id (DeleteUserRequest) returns (DeleteUserResponse)
 }
 
 // 好友相关
@@ -123,6 +136,11 @@ type ( // 好友信息
 	FriendInfoResponse {
 		FriendId int64  `json:"friendId"`
 		Nickname string `json:"nickname"`
+	}
+	FriendListRequest {
+		UserId int64 `form:"userId,optional"`
+		Page   int32 `form:"page,default=1"`
+		Size   int32 `form:"size,default=10"`
 	}
 	FriendListResponse {
 		Friends []FriendInfoResponse `json:"friends"`
@@ -159,7 +177,7 @@ service gateway {
 
 	@doc "Get friend list"
 	@handler FriendList
-	get /friend returns (FriendListResponse)
+	get /friend (FriendListRequest) returns (FriendListResponse)
 
 	@doc "Add a new friend"
 	@handler FriendAdd
@@ -175,6 +193,11 @@ type ( // 群组信息
 	GroupInfoResponse {
 		GroupId int64  `json:"groupId"`
 		Name    string `json:"name"`
+	}
+	GroupListRequest {
+		UserId int64 `form:"userId,optional"`
+		Page   int32 `form:"page,default=1"`
+		Size   int32 `form:"size,default=10"`
 	}
 	GroupListResponse {
 		Groups []GroupInfoResponse `json:"groups"`
@@ -222,7 +245,7 @@ service gateway {
 
 	@doc "Get group list"
 	@handler GroupList
-	get /group returns (GroupListResponse)
+	get /group (GroupListRequest) returns (GroupListResponse)
 
 	@doc "Add a new group"
 	@handler GroupAdd

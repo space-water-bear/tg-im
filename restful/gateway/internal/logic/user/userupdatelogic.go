@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"im2/internal/errno"
+	"im2/service/user/user"
 
 	"im2/restful/gateway/internal/svc"
 	"im2/restful/gateway/internal/types"
@@ -25,7 +27,20 @@ func NewUserUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserUp
 }
 
 func (l *UserUpdateLogic) UserUpdate(req *types.UpdateUserInfoRequest) (resp *types.UpdateUserResponse, err error) {
-	// todo: add your logic here and delete this line
+	rest, err := l.svcCtx.UserRpc.UpdateInfo(l.ctx, &user.UpdateInfoRequest{
+		UserId:   req.UserId,
+		Email:    req.Email,
+		Avatar:   req.Avatar,
+		Nickname: req.NickName,
+		Status:   req.Status,
+	})
+	if err != nil {
+		return nil, errno.NewDefaultError(errno.InternalServerError)
+	} else if rest.Code != 0 {
+		return nil, errno.NewDefaultError(rest.Code)
+	}
 
-	return
+	return &types.UpdateUserResponse{
+		Success: true,
+	}, nil
 }

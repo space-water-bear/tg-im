@@ -1,12 +1,21 @@
 Name: user.rpc
 ListenOn: 0.0.0.0:18001
-Etcd:
-  Hosts:
-  - localhost:2379
-  Key: user.rpc
+#Etcd:
+#  Hosts:
+#    - 127.0.0.1:2379
+#  Key: user.rpc
 
-DataSource: "user=postgres password=1234567890 host=10.3.21.250 port=5432 dbname=tg-im sslmode=disable"
-Redis: #redis://:guang123@10.3.21.250:6379/
+Database:
+  Path: "10.3.21.250"
+  Port: 5432
+  Username: "postgres"
+  Password: "1234567890"
+  Dbname: "tg-im"
+  SslMode: "disable"
+  LogMode: "dev"
+  LogZap: true
+
+Redis:
   Host: "10.3.21.250:6379"
   Type: "node"
   Pass: "guang123"
@@ -18,5 +27,5 @@ AuthToken:
   AccessExpire: 360 # 单位：天
 Log:
   Level: "debug"
-  Mode: "file"
+  Mode: "console"
   Path: "logs/service/user"

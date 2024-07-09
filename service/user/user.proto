@@ -22,6 +22,7 @@ message LoginResponse {
   int32 code = 1;
   string token = 2;
   int64 userId = 3;
+  int64 expire = 4;
 }
 
 message GetInfoRequest {
@@ -29,12 +30,13 @@ message GetInfoRequest {
 }
 
 message GetInfoResponse {
-  int64 userId = 1;
-  string username = 2;
-  string nickname = 3;
-  string email = 4;
-  string avatar = 5;
-  string ip = 6;
+  int32 code = 1;
+  int64 userId = 2;
+  string username = 3;
+  string nickname = 4;
+  string email = 5;
+  string avatar = 6;
+  string ip = 7;
 }
 
 message UpdateInfoRequest {
@@ -42,6 +44,7 @@ message UpdateInfoRequest {
   string nickname = 2;
   string email = 3;
   string avatar = 4;
+  int32 status = 5;
 }
 
 message UpdateInfoResponse {
@@ -57,12 +60,13 @@ message DeleteInfoResponse {
 }
 
 message GetListRequest {
-  int32 code = 1;
   int32 page = 2;
-  int32 pageSize = 3;
+  int32 size = 3;
   string username = 4;
   string email = 5;
   int32 status = 6;
+  string nickname = 7;
+  int32 roleId = 8;
 }
 
 message GetListResponse {

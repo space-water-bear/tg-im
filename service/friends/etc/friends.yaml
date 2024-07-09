@@ -1,6 +1,15 @@
 Name: friends.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:18002
 Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: friends.rpc
+
+
+
+DataSource: "user=postgres password=1234567890 host=10.3.21.250 port=5432 dbname=tg-im sslmode=disable"
+
+Log:
+  Level: "debug"
+  Mode: "file"
+  Path: "logs/service/user"

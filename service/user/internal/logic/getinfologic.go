@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"im2/internal/errno"
 
 	"im2/service/user/internal/svc"
 	"im2/service/user/user"
@@ -24,7 +25,23 @@ func NewGetInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetInfoLo
 }
 
 func (l *GetInfoLogic) GetInfo(in *user.GetInfoRequest) (*user.GetInfoResponse, error) {
-	// todo: add your logic here and delete this line
 
-	return &user.GetInfoResponse{}, nil
+	if in.UserId == 0 {
+		return &user.GetInfoResponse{Code: errno.ErrUserNotFound}, nil
+	}
+
+	u, err := l.svcCtx.Model.FindOne(l.ctx, in.UserId)
+	if err != nil {
+		return &user.GetInfoResponse{Code: errno.ErrUserNotFound}, nil
+	}
+
+	return &user.GetInfoResponse{
+		Code:     errno.OK,
+		UserId:   u.Id,
+		Username: u.Username,
+		Nickname: u.Nickname.String,
+		Email:    u.Email,
+		Ip:       u.Ip.String,
+	}, nil
+
 }

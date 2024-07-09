@@ -28,10 +28,13 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 
 func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, err error) {
 
+	//fmt.Println("req", req)
 	rest, err := l.svcCtx.UserRpc.Login(l.ctx, &userclient.LoginRequest{
 		Username: req.Username,
 		Password: req.Password,
 	})
+
+	//fmt.Println("rest", rest)
 
 	if err != nil {
 		return nil, errno.NewDefaultError(errno.InternalServerError)
@@ -42,6 +45,7 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 	return &types.LoginResponse{
 		UserId: rest.UserId,
 		Token:  rest.Token,
+		Expire: rest.Expire,
 	}, nil
 
 }

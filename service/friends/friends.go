@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/logc"
 
 	"im2/service/friends/friends"
 	"im2/service/friends/internal/config"
@@ -16,13 +17,17 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/friends.yaml", "the config file")
+var configFile = flag.String("f", "service/friends/etc/friends.yaml", "the config file")
 
 func main() {
 	flag.Parse()
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
+
+	logc.MustSetup(c.Log)
+	defer logc.Close()
+
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {

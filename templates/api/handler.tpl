@@ -3,8 +3,9 @@ package {{.PkgName}}
 import (
 	"net/http"
 
+	{{if .HasRequest}}"im2/internal/errno"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"im2/internal/response"
+	{{end}}"im2/internal/response"
 	{{.ImportPackages}}
 )
 
@@ -13,7 +14,7 @@ func {{.HandlerName}}(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		{{if .HasRequest}}var req types.{{.RequestType}}
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			response.Response(w, nil, errno.NewParamsError(err))
 			return
 		}
 

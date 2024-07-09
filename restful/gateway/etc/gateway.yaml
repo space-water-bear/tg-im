@@ -1,19 +1,28 @@
 Name: gateway
 Host: 0.0.0.0
 Port: 10000
-
+Timeout: 0
 Log:
   Level: "debug"
-  Mode: "file"
+  Mode: "console"
   Path: "logs/restful/user"
+
+Redis:
+  Host: "10.3.21.250:6379"
+  Type: "node"
+  Pass: "guang123"
+  Tls: false
+
+Auth:
+  AccessSecret: "123456789"
+  AccessExpire: 360 # 单位：天
+
+NSQ:
+  Host: "10.3.21.250:4161"
 
 UserRpc:
   Target: direct:///localhost:18001
 #  Etcd:
 #    Hosts:
-#      - localhost:2379
+#      - 127.0.0.1:2379
 #    Key: user.rpc
-
-Auth:
-  AccessSecret: "123456789"
-  AccessExpire: 360 # 单位：天

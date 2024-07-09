@@ -40,7 +40,7 @@ const (
 var ErrMsg = map[int32]string{
 	OK:                  "成功",
 	InternalServerError: "服务器内部错误",
-	ErrBind:             "绑定错误",
+	ErrBind:             "绑定参数错误",
 	ErrValidation:       "参数验证错误",
 	ErrDatabase:         "数据库错误",
 	ErrToken:            "错误的token",

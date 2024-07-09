@@ -37,7 +37,7 @@ type DeleteGroupRequest struct {
 }
 
 type DeleteUserRequest struct {
-	UserId int64 `json:"userId"`
+	ID int64 `path:"id"`
 }
 
 type DeleteUserResponse struct {
@@ -53,6 +53,12 @@ type FriendInfoResponse struct {
 	Nickname string `json:"nickname"`
 }
 
+type FriendListRequest struct {
+	UserId int64 `form:"userId,optional"`
+	Page   int32 `form:"page,default=1"`
+	Size   int32 `form:"size,default=10"`
+}
+
 type FriendListResponse struct {
 	Friends []FriendInfoResponse `json:"friends"`
 }
@@ -64,6 +70,12 @@ type GroupDeleteResponse struct {
 type GroupInfoResponse struct {
 	GroupId int64  `json:"groupId"`
 	Name    string `json:"name"`
+}
+
+type GroupListRequest struct {
+	UserId int64 `form:"userId,optional"`
+	Page   int32 `form:"page,default=1"`
+	Size   int32 `form:"size,default=10"`
 }
 
 type GroupListResponse struct {
@@ -78,6 +90,7 @@ type LoginRequest struct {
 type LoginResponse struct {
 	UserId int64  `json:"userId"`
 	Token  string `json:"token"`
+	Expire int64  `json:"expire"`
 }
 
 type RegisterRequest struct {
@@ -101,12 +114,18 @@ type UpdateGroupResponse struct {
 
 type UpdateUserInfoRequest struct {
 	UserId   int64  `json:"userId"`
-	Username string `json:"username,omitempty"`
-	Email    string `json:"email,omitempty"`
+	Email    string `json:"email,optional"`
+	NickName string `json:"nickName,optional"`
+	Avatar   string `json:"avatar,optional"`
+	Status   int32  `json:"status,optional"`
 }
 
 type UpdateUserResponse struct {
 	Success bool `json:"success"`
+}
+
+type UserInfoRequest struct {
+	ID string `path:"id"`
 }
 
 type UserInfoResponse struct {
@@ -115,6 +134,14 @@ type UserInfoResponse struct {
 	NickName string `json:"nickName"`
 }
 
+type UserListRequest struct {
+	Page     int32  `form:"page,default=1"`
+	Size     int32  `form:"size,default=10"`
+	Username string `form:"username,optional"`
+	NickName string `form:"nickName,optional"`
+}
+
 type UserListResponse struct {
-	Users []UserInfoResponse `json:"users"`
+	Rows  []UserInfoResponse `json:"users"`
+	Total int32              `json:"total"`
 }

@@ -24,7 +24,7 @@ func NewGroupListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GroupLi
 	}
 }
 
-func (l *GroupListLogic) GroupList() (resp *types.GroupListResponse, err error) {
+func (l *GroupListLogic) GroupList(req *types.GroupListRequest) (resp *types.GroupListResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return

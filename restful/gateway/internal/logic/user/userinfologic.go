@@ -2,6 +2,9 @@ package user
 
 import (
 	"context"
+	"im2/internal/errno"
+	"im2/service/user/user"
+	"strconv"
 
 	"im2/restful/gateway/internal/svc"
 	"im2/restful/gateway/internal/types"
@@ -24,8 +27,23 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 	}
 }
 
-func (l *UserInfoLogic) UserInfo() (resp *types.UserInfoResponse, err error) {
-	// todo: add your logic here and delete this line
+func (l *UserInfoLogic) UserInfo(req *types.UserInfoRequest) (resp *types.UserInfoResponse, err error) {
+	// 将字符串转换成int64
+	id, _ := strconv.ParseInt(req.ID, 10, 64)
 
-	return
+	rest, err := l.svcCtx.UserRpc.GetInfo(l.ctx, &user.GetInfoRequest{
+		UserId: id,
+	})
+
+	if err != nil {
+		return nil, errno.NewDefaultError(errno.InternalServerError)
+	} else if rest.Code != 0 {
+		return nil, errno.NewDefaultError(rest.Code)
+	}
+
+	return &types.UserInfoResponse{
+		NickName: rest.Nickname,
+		UserId:   rest.UserId,
+		Username: rest.Username,
+	}, nil
 }

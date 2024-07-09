@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"im2/internal/errno"
+	"im2/service/user/user"
 
 	"im2/restful/gateway/internal/svc"
 	"im2/restful/gateway/internal/types"
@@ -25,7 +27,17 @@ func NewUserAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserAddLo
 }
 
 func (l *UserAddLogic) UserAdd(req *types.AddUserRequest) (resp *types.AddUserResponse, err error) {
-	// todo: add your logic here and delete this line
 
-	return
+	rest, err := l.svcCtx.UserRpc.Register(l.ctx, &user.RegisterRequest{
+		Username: req.Username,
+		Password: req.Password,
+		Email:    req.Email,
+	})
+	if err != nil {
+		return nil, errno.NewDefaultError(errno.InternalServerError)
+	} else if rest.Code != 0 {
+		return nil, errno.NewDefaultError(rest.Code)
+	}
+
+	return &types.AddUserResponse{}, nil
 }
