@@ -22,11 +22,14 @@ type (
 	GetFriendsListResponse = friends.GetFriendsListResponse
 	RemoveFriendRequest    = friends.RemoveFriendRequest
 	RemoveFriendResponse   = friends.RemoveFriendResponse
+	UpdateFriendRequest    = friends.UpdateFriendRequest
+	UpdateFriendResponse   = friends.UpdateFriendResponse
 
 	Friends interface {
 		GetFriendsList(ctx context.Context, in *GetFriendsListRequest, opts ...grpc.CallOption) (*GetFriendsListResponse, error)
 		GetFriend(ctx context.Context, in *GetFriendRequest, opts ...grpc.CallOption) (*GetFriendResponse, error)
 		AddFriend(ctx context.Context, in *AddFriendRequest, opts ...grpc.CallOption) (*AddFriendResponse, error)
+		UpdateFriend(ctx context.Context, in *UpdateFriendRequest, opts ...grpc.CallOption) (*UpdateFriendResponse, error)
 		RemoveFriend(ctx context.Context, in *RemoveFriendRequest, opts ...grpc.CallOption) (*RemoveFriendResponse, error)
 	}
 
@@ -54,6 +57,11 @@ func (m *defaultFriends) GetFriend(ctx context.Context, in *GetFriendRequest, op
 func (m *defaultFriends) AddFriend(ctx context.Context, in *AddFriendRequest, opts ...grpc.CallOption) (*AddFriendResponse, error) {
 	client := friends.NewFriendsClient(m.cli.Conn())
 	return client.AddFriend(ctx, in, opts...)
+}
+
+func (m *defaultFriends) UpdateFriend(ctx context.Context, in *UpdateFriendRequest, opts ...grpc.CallOption) (*UpdateFriendResponse, error) {
+	client := friends.NewFriendsClient(m.cli.Conn())
+	return client.UpdateFriend(ctx, in, opts...)
 }
 
 func (m *defaultFriends) RemoveFriend(ctx context.Context, in *RemoveFriendRequest, opts ...grpc.CallOption) (*RemoveFriendResponse, error) {

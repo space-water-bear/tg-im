@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"time"
 )
@@ -16,6 +17,7 @@ func GenerateToken(userId int64, username string, secret string, expire int64) (
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token.Claims = claims
 
+	fmt.Println("gen token user:", userId, username)
 	rest, err := token.SignedString([]byte(secret))
 	return expTime, rest, err
 }

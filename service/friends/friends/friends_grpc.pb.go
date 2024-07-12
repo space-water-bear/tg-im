@@ -22,6 +22,7 @@ const (
 	Friends_GetFriendsList_FullMethodName = "/friends.Friends/GetFriendsList"
 	Friends_GetFriend_FullMethodName      = "/friends.Friends/GetFriend"
 	Friends_AddFriend_FullMethodName      = "/friends.Friends/AddFriend"
+	Friends_UpdateFriend_FullMethodName   = "/friends.Friends/UpdateFriend"
 	Friends_RemoveFriend_FullMethodName   = "/friends.Friends/RemoveFriend"
 )
 
@@ -32,6 +33,7 @@ type FriendsClient interface {
 	GetFriendsList(ctx context.Context, in *GetFriendsListRequest, opts ...grpc.CallOption) (*GetFriendsListResponse, error)
 	GetFriend(ctx context.Context, in *GetFriendRequest, opts ...grpc.CallOption) (*GetFriendResponse, error)
 	AddFriend(ctx context.Context, in *AddFriendRequest, opts ...grpc.CallOption) (*AddFriendResponse, error)
+	UpdateFriend(ctx context.Context, in *UpdateFriendRequest, opts ...grpc.CallOption) (*UpdateFriendResponse, error)
 	RemoveFriend(ctx context.Context, in *RemoveFriendRequest, opts ...grpc.CallOption) (*RemoveFriendResponse, error)
 }
 
@@ -70,6 +72,15 @@ func (c *friendsClient) AddFriend(ctx context.Context, in *AddFriendRequest, opt
 	return out, nil
 }
 
+func (c *friendsClient) UpdateFriend(ctx context.Context, in *UpdateFriendRequest, opts ...grpc.CallOption) (*UpdateFriendResponse, error) {
+	out := new(UpdateFriendResponse)
+	err := c.cc.Invoke(ctx, Friends_UpdateFriend_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *friendsClient) RemoveFriend(ctx context.Context, in *RemoveFriendRequest, opts ...grpc.CallOption) (*RemoveFriendResponse, error) {
 	out := new(RemoveFriendResponse)
 	err := c.cc.Invoke(ctx, Friends_RemoveFriend_FullMethodName, in, out, opts...)
@@ -86,6 +97,7 @@ type FriendsServer interface {
 	GetFriendsList(context.Context, *GetFriendsListRequest) (*GetFriendsListResponse, error)
 	GetFriend(context.Context, *GetFriendRequest) (*GetFriendResponse, error)
 	AddFriend(context.Context, *AddFriendRequest) (*AddFriendResponse, error)
+	UpdateFriend(context.Context, *UpdateFriendRequest) (*UpdateFriendResponse, error)
 	RemoveFriend(context.Context, *RemoveFriendRequest) (*RemoveFriendResponse, error)
 	mustEmbedUnimplementedFriendsServer()
 }
@@ -102,6 +114,9 @@ func (UnimplementedFriendsServer) GetFriend(context.Context, *GetFriendRequest) 
 }
 func (UnimplementedFriendsServer) AddFriend(context.Context, *AddFriendRequest) (*AddFriendResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddFriend not implemented")
+}
+func (UnimplementedFriendsServer) UpdateFriend(context.Context, *UpdateFriendRequest) (*UpdateFriendResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateFriend not implemented")
 }
 func (UnimplementedFriendsServer) RemoveFriend(context.Context, *RemoveFriendRequest) (*RemoveFriendResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveFriend not implemented")
@@ -173,6 +188,24 @@ func _Friends_AddFriend_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Friends_UpdateFriend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateFriendRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FriendsServer).UpdateFriend(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Friends_UpdateFriend_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FriendsServer).UpdateFriend(ctx, req.(*UpdateFriendRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Friends_RemoveFriend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RemoveFriendRequest)
 	if err := dec(in); err != nil {
@@ -209,6 +242,10 @@ var Friends_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddFriend",
 			Handler:    _Friends_AddFriend_Handler,
+		},
+		{
+			MethodName: "UpdateFriend",
+			Handler:    _Friends_UpdateFriend_Handler,
 		},
 		{
 			MethodName: "RemoveFriend",

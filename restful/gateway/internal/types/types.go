@@ -2,7 +2,8 @@
 package types
 
 type AddFriendRequest struct {
-	FriendId int64 `json:"friendId"`
+	FriendId int64  `json:"friendId"`
+	Remark   string `json:"remark"`
 }
 
 type AddFriendResponse struct {
@@ -50,17 +51,22 @@ type FriendDeleteResponse struct {
 
 type FriendInfoResponse struct {
 	FriendId int64  `json:"friendId"`
+	Username string `json:"username"`
 	Nickname string `json:"nickname"`
+	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
 }
 
 type FriendListRequest struct {
-	UserId int64 `form:"userId,optional"`
-	Page   int32 `form:"page,default=1"`
-	Size   int32 `form:"size,default=10"`
+	UserId int64  `form:"userId,optional"`
+	Page   int32  `form:"page,default=1"`
+	Size   int32  `form:"size,default=10"`
+	Search string `form:"search,optional"`
 }
 
 type FriendListResponse struct {
-	Friends []FriendInfoResponse `json:"friends"`
+	Rows  []FriendInfoResponse `json:"rows"`
+	Total int32                `json:"total"`
 }
 
 type GroupDeleteResponse struct {
@@ -100,6 +106,15 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
+	Success bool `json:"success"`
+}
+
+type UpdateFriendRequest struct {
+	FriendId int64 `json:"friendId"`
+	Status   int32 `json:"status"`
+}
+
+type UpdateFriendResponse struct {
 	Success bool `json:"success"`
 }
 

@@ -22,7 +22,6 @@ NSQ:
 
 UserRpc:
   Target: direct:///localhost:18001
-#  Etcd:
-#    Hosts:
-#      - 127.0.0.1:2379
-#    Key: user.rpc
+
+FriendsRpc:
+  Target: direct:///localhost:18002

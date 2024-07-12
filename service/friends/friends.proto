@@ -12,12 +12,18 @@ message FriendInfo {// 好友信息
 }
 
 message GetFriendsListRequest {// 获取好友列表
-  int64 Page = 1;
-  int64 PageSize = 2;
+  int32 page = 1;
+  int32 size = 2;
+  string username = 3;
+  string nickname = 4;
+  string email = 5;
+  int64 userId = 6;
 }
 
 message GetFriendsListResponse {// 好友列表
-  repeated FriendInfo friends = 1;
+  repeated FriendInfo rows = 1;
+  int32 code = 2;
+  int32 total = 3;
 }
 
 message GetFriendRequest {// 获取好友信息
@@ -26,16 +32,28 @@ message GetFriendRequest {// 获取好友信息
 }
 
 message GetFriendResponse {// 好友信息
-  FriendInfo friend = 1;
+  int32 code = 1;
+  FriendInfo friend = 2;
 }
 
 message AddFriendRequest {// 添加好友
   int64 userId = 1;
   int64 friendId = 2;
+  string remark = 3;
 }
 
 message AddFriendResponse {// 添加好友
-  bool success = 1;
+  int32 code = 1;
+}
+
+message UpdateFriendRequest {// 通过好友请求
+  int64 userId = 1;
+  int64 friendId = 2;
+  int32 status = 3;
+}
+
+message UpdateFriendResponse {// 通过好友请求
+  int32 code = 1;
 }
 
 message RemoveFriendRequest {// 删除好友
@@ -44,12 +62,13 @@ message RemoveFriendRequest {// 删除好友
 }
 
 message RemoveFriendResponse {// 删除好友
-  bool success = 1;
+  int32 code = 1;
 }
 
 service Friends {
   rpc GetFriendsList(GetFriendsListRequest) returns (GetFriendsListResponse) {}
   rpc GetFriend(GetFriendRequest) returns (GetFriendResponse) {}
   rpc AddFriend(AddFriendRequest) returns (AddFriendResponse) {}
+  rpc UpdateFriend(UpdateFriendRequest) returns (UpdateFriendResponse) {}
   rpc RemoveFriend(RemoveFriendRequest) returns (RemoveFriendResponse) {}
 }

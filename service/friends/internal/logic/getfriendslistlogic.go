@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"im2/internal/errno"
+	"im2/service/friends/internal/model"
 
 	"im2/service/friends/friends"
 	"im2/service/friends/internal/svc"
@@ -24,7 +26,30 @@ func NewGetFriendsListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetFriendsListLogic) GetFriendsList(in *friends.GetFriendsListRequest) (*friends.GetFriendsListResponse, error) {
-	// todo: add your logic here and delete this line
 
-	return &friends.GetFriendsListResponse{}, nil
+	friend, total, err := l.svcCtx.Model.FindListByPage(l.ctx, model.Friends{
+		UserId:         in.UserId,
+		FriendUsername: in.Username,
+		FriendNickname: in.Nickname,
+	}, in.Page, in.Size)
+	if err != nil {
+		return &friends.GetFriendsListResponse{Code: errno.ErrDatabase}, nil
+	}
+
+	data := make([]*friends.FriendInfo, 0)
+	for _, v := range friend {
+		data = append(data, &friends.FriendInfo{
+			FriendId: v.FriendId,
+			Nickname: v.FriendNickname,
+			Username: v.FriendUsername,
+			Email:    v.FriendEmail.String,
+			Avatar:   v.FriendAvatar.String,
+		})
+	}
+
+	return &friends.GetFriendsListResponse{
+		Code:  errno.OK,
+		Rows:  data,
+		Total: int32(total),
+	}, nil
 }

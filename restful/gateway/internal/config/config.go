@@ -7,8 +7,8 @@ import (
 
 type Config struct {
 	rest.RestConf
-	UserRpc zrpc.RpcClientConf
-	Auth    struct {
+
+	Auth struct {
 		AccessSecret string
 		AccessExpire int64
 	}
@@ -21,4 +21,7 @@ type Config struct {
 	NSQ struct {
 		Host string
 	}
+
+	UserRpc    zrpc.RpcClientConf
+	FriendsRpc zrpc.RpcClientConf
 }

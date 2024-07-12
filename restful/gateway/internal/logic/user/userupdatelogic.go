@@ -36,7 +36,7 @@ func (l *UserUpdateLogic) UserUpdate(req *types.UpdateUserInfoRequest) (resp *ty
 	})
 	if err != nil {
 		return nil, errno.NewDefaultError(errno.InternalServerError)
-	} else if rest.Code != 0 {
+	} else if rest.Code != errno.OK {
 		return nil, errno.NewDefaultError(rest.Code)
 	}
 

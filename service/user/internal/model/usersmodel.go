@@ -37,7 +37,14 @@ func (m *customUsersModel) FindListByPage(ctx context.Context, conditions Users,
 	var total int64
 	var results []Users
 
-	if err := m.conn.Model(&Users{}).Where(conditions).Count(&total).Offset(int((page - 1) * pageSize)).Limit(int(pageSize)).Find(&results).Error; err != nil {
+	if pageSize < 1 {
+		pageSize = 10
+	}
+	if page < 1 {
+		page = 1
+	}
+
+	if err := m.conn.WithContext(ctx).Model(&Users{}).Where(conditions).Count(&total).Offset(int((page - 1) * pageSize)).Limit(int(pageSize)).Find(&results).Error; err != nil {
 		return nil, 0, err
 	}
 
@@ -46,7 +53,7 @@ func (m *customUsersModel) FindListByPage(ctx context.Context, conditions Users,
 
 func (m *customUsersModel) FindOneByEmail(ctx context.Context, email string) (*Users, error) {
 	var res Users
-	err := m.conn.Where("email = ?", email).First(&res).Error
+	err := m.conn.WithContext(ctx).Where("email = ?", email).First(&res).Error
 	switch {
 	case err == nil:
 		return &res, nil

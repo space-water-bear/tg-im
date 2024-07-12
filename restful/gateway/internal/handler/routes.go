@@ -29,6 +29,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: friend.FriendAddHandler(serverCtx),
 			},
 			{
+				// Update friend info
+				Method:  http.MethodPut,
+				Path:    "/friend",
+				Handler: friend.FriendUpdateHandler(serverCtx),
+			},
+			{
 				// Delete friend
 				Method:  http.MethodDelete,
 				Path:    "/friend",

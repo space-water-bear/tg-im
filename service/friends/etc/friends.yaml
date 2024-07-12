@@ -1,15 +1,36 @@
 Name: friends.rpc
 ListenOn: 0.0.0.0:18002
-Etcd:
-  Hosts:
-  - 127.0.0.1:2379
+#Etcd:
+#  Hosts:
+#  - 127.0.0.1:2379
+#  Key: friends.rpc
+
+Database:
+  Path: "10.3.21.250"
+  Port: 5432
+  Username: "postgres"
+  Password: "1234567890"
+  Dbname: "tg-im"
+  SslMode: "disable"
+  LogMode: "dev"
+  LogZap: true
+
+Redis:
+  Host: "10.3.21.250:6379"
+  Type: "node"
+  Pass: "guang123"
+  Tls: false
   Key: friends.rpc
 
 
-
-DataSource: "user=postgres password=1234567890 host=10.3.21.250 port=5432 dbname=tg-im sslmode=disable"
-
 Log:
   Level: "debug"
-  Mode: "file"
-  Path: "logs/service/user"
+  Mode: "console"
+  Path: "logs/service/friends"
+
+UserRpc:
+  Target: direct:///localhost:18001
+#  Etcd:
+#    Hosts:
+#      - 127.0.0.1:2379
+#    Key: user.rpc

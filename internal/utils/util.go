@@ -12,3 +12,10 @@ func Encrypt(source string) (string, error) {
 func Compare(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
+
+func TernaryIF[T any](condition bool, a, b T) T {
+	if condition {
+		return a
+	}
+	return b
+}

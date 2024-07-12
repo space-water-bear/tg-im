@@ -135,23 +135,39 @@ service gateway {
 type ( // 好友信息
 	FriendInfoResponse {
 		FriendId int64  `json:"friendId"`
+		Username string `json:"username"`
 		Nickname string `json:"nickname"`
+		Email    string `json:"email"`
+		Avatar   string `json:"avatar"`
 	}
 	FriendListRequest {
-		UserId int64 `form:"userId,optional"`
-		Page   int32 `form:"page,default=1"`
-		Size   int32 `form:"size,default=10"`
+		UserId int64  `form:"userId,optional"`
+		Page   int32  `form:"page,default=1"`
+		Size   int32  `form:"size,default=10"`
+		Search string `form:"search,optional"`
 	}
 	FriendListResponse {
-		Friends []FriendInfoResponse `json:"friends"`
+		Rows  []FriendInfoResponse `json:"rows"`
+		Total int32                `json:"total"`
 	}
 )
 
 type ( // 好友-添加
 	AddFriendRequest {
-		FriendId int64 `json:"friendId"`
+		FriendId int64  `json:"friendId"`
+		Remark   string `json:"remark"`
 	}
 	AddFriendResponse {
+		Success bool `json:"success"`
+	}
+)
+
+type ( // 好友-更新
+	UpdateFriendRequest {
+		FriendId int64 `json:"friendId"`
+		Status   int32 `json:"status"`
+	}
+	UpdateFriendResponse {
 		Success bool `json:"success"`
 	}
 )
@@ -182,6 +198,10 @@ service gateway {
 	@doc "Add a new friend"
 	@handler FriendAdd
 	post /friend (AddFriendRequest) returns (AddFriendResponse)
+
+	@doc "Update friend info"
+	@handler FriendUpdate
+	put /friend (UpdateFriendRequest) returns (UpdateFriendResponse)
 
 	@doc "Delete friend"
 	@handler FriendDelete

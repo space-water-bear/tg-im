@@ -25,6 +25,9 @@ const (
 	// ErrTokenInvalid token无效
 	ErrTokenInvalid = 10010
 
+	/*
+	 用户相关
+	*/
 	// ErrUserNotFound 用户不存在
 	ErrUserNotFound = 20001
 	// ErrUserExist 用户已经存在
@@ -35,6 +38,22 @@ const (
 	ErrEncryptPassword = 20004
 	// ErrEmailExist 邮箱已经存在
 	ErrEmailExist = 20005
+
+	/*
+		好友相关
+	*/
+	// ErrFriendNotFound 好友不存在
+	ErrFriendNotFound = 30001
+	// ErrFriendExist 好友已经存在
+	ErrFriendExist = 30002
+	// ErrFriendRequestNotFound 好友请求不存在
+	ErrFriendRequestNotFound = 30003
+	// ErrFriendRequestExist 好友请求已经存在
+	ErrFriendRequestExist = 30004
+	// ErrFriendRequestRejected 好友请求被拒绝
+	ErrFriendRequestRejected = 30005
+	// ErrFriendBlackList 好友在黑名单中
+	ErrFriendBlackList = 30006
 )
 
 var ErrMsg = map[int32]string{
@@ -55,6 +74,13 @@ var ErrMsg = map[int32]string{
 	ErrPasswordIncorrect: "密码错误",
 	ErrEncryptPassword:   "加密密码错误",
 	ErrEmailExist:        "邮箱已经存在",
+
+	ErrFriendNotFound:        "好友不存在",
+	ErrFriendExist:           "好友已经存在",
+	ErrFriendRequestNotFound: "好友请求不存在",
+	ErrFriendRequestExist:    "好友请求已经存在",
+	ErrFriendRequestRejected: "好友请求被拒绝",
+	ErrFriendBlackList:       "好友在黑名单中",
 }
 
 // Err2Msg 错误码转错误信息
