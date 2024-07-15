@@ -5,9 +5,13 @@ import (
 	"fmt"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"im2/internal/auth"
+	"im2/internal/errno"
+	"im2/internal/response"
 	"im2/restful/gateway/internal/svc"
 	"io"
 	"net/http"
+	"reflect"
 	"time"
 )
 
@@ -26,6 +30,7 @@ func handleClientDisconnect(r *http.Request) {
 }
 
 func sseHandle(svcCtx *svc.ServiceContext) http.HandlerFunc {
+	fmt.Println(svcCtx.Config.Auth.AccessSecret)
 	return func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println("sseHandle")
 		w.Header().Set("Content-Type", "text/event-stream")
@@ -42,7 +47,19 @@ func sseHandle(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		fmt.Println(req)
+		if req.Token == "" {
+			response.Response(w, nil, errno.NewDefaultError(errno.ErrToken))
+			return
+		}
+
+		jwtData, err := auth.CheckToken(req.Token, svcCtx.Config.Auth.AccessSecret)
+		if err != nil {
+			fmt.Println("check token error", err)
+			response.Response(w, nil, errno.NewDefaultError(errno.ErrToken))
+			return
+		}
+		//fmt.Println("jwtData: ", jwtData)
+		fmt.Println("userId: ", jwtData, reflect.TypeOf(jwtData))
 
 		channel := make(chan Message)
 

@@ -26,9 +26,10 @@ type ( // 登陆
 		Password string `json:"password"`
 	}
 	LoginResponse {
-		UserId int64  `json:"userId"`
-		Token  string `json:"token"`
-		Expire int64  `json:"expire"`
+		UserId  int64  `json:"userId"`
+		Token   string `json:"token"`
+		Expire  int64  `json:"expire"`
+		Refresh int64  `json:"refresh"`
 	}
 )
 

@@ -43,9 +43,10 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 	}
 
 	return &types.LoginResponse{
-		UserId: rest.UserId,
-		Token:  rest.Token,
-		Expire: rest.Expire,
+		UserId:  rest.UserId,
+		Token:   rest.Token,
+		Expire:  rest.Expire,
+		Refresh: rest.Expire / 2,
 	}, nil
 
 }

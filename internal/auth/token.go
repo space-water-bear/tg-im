@@ -21,3 +21,21 @@ func GenerateToken(userId int64, username string, secret string, expire int64) (
 	rest, err := token.SignedString([]byte(secret))
 	return expTime, rest, err
 }
+
+func CheckToken(token, secret string) (int64, error) {
+	tokenSource, err := jwt.Parse(token, func(tk *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
+	if err != nil {
+		return 0, err
+	}
+
+	claims, _ := tokenSource.Claims.(jwt.MapClaims)
+	if err := claims.Valid(); err != nil {
+		return 0, err
+	}
+
+	userId := int64(claims["id"].(float64))
+
+	return userId, nil
+}

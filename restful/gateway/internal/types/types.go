@@ -94,9 +94,10 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	UserId int64  `json:"userId"`
-	Token  string `json:"token"`
-	Expire int64  `json:"expire"`
+	UserId  int64  `json:"userId"`
+	Token   string `json:"token"`
+	Expire  int64  `json:"expire"`
+	Refresh int64  `json:"refresh"`
 }
 
 type RegisterRequest struct {
