@@ -21,7 +21,15 @@ type Config struct {
 	NSQ struct {
 		Host string
 	}
+	Minio struct {
+		Endpoint        string
+		AccessKeyID     string
+		SecretAccessKey string
+		Bucket          string
+		UseSSL          bool
+	}
 
 	UserRpc    zrpc.RpcClientConf
 	FriendsRpc zrpc.RpcClientConf
+	MessageRpc zrpc.RpcClientConf
 }

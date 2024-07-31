@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="消息" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="im2" />
+    <working_directory value="$PROJECT_DIR$" />
+    <kind value="PACKAGE" />
+    <package value="im2/service/message" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/service/message/message.go" />
+    <method v="2" />
+  </configuration>
+</component>

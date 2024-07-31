@@ -90,9 +90,9 @@ message MergeForwardMsg {
   repeated MessageInfo messages = 1;
 }
 
-message CommandMsg {
-  string command = 1;
-  map<string, string> parameters = 2;
+message CommandMsg { // 例子: /命令 参数 值
+  string command = 1; // 命令
+  map<string, string> parameters = 2; // 参数
 }
 
 message RichTextMsg {
@@ -112,7 +112,7 @@ message SendMessageRequest {
 }
 
 message SendMessageResponse {
-  int64 code = 1;
+  int32 code = 1;
   int64 messageId = 2;
   string message = 3;
 }

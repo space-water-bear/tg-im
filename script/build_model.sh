@@ -17,7 +17,12 @@ db_name="tg-im"
 #  -d "${BASEPATH}/../service/user/internal/model"
 
 
+#goctl model pg datasource --url="postgresql://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}?sslmode=disable" \
+#  --table "friends" \
+#  --home="${BASEPATH}/../templates" \
+#  -d "${BASEPATH}/../service/friends/internal/model"
+#
 goctl model pg datasource --url="postgresql://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}?sslmode=disable" \
-  --table "friends" \
+  --table "messages" \
   --home="${BASEPATH}/../templates" \
-  -d "${BASEPATH}/../service/friends/internal/model"
+  -d "${BASEPATH}/../service/message/internal/model"

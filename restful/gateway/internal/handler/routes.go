@@ -7,6 +7,7 @@ import (
 	friend "im2/restful/gateway/internal/handler/friend"
 	group "im2/restful/gateway/internal/handler/group"
 	login "im2/restful/gateway/internal/handler/login"
+	message "im2/restful/gateway/internal/handler/message"
 	user "im2/restful/gateway/internal/handler/user"
 	"im2/restful/gateway/internal/svc"
 
@@ -109,6 +110,31 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: login.RegisterHandler(serverCtx),
 			},
 		},
+		rest.WithPrefix("/api/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// Send message
+				Method:  http.MethodPost,
+				Path:    "/message",
+				Handler: message.MessageSendHandler(serverCtx),
+			},
+			{
+				// Get message history
+				Method:  http.MethodGet,
+				Path:    "/message",
+				Handler: message.MessageHistoryHandler(serverCtx),
+			},
+			{
+				// Send file type message
+				Method:  http.MethodPost,
+				Path:    "/message/file",
+				Handler: message.MessageFileSendHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/api/v1"),
 	)
 

@@ -24,7 +24,6 @@ func NewReceiveMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Re
 }
 
 func (l *ReceiveMessageLogic) ReceiveMessage(in *message.ReceiveMessageRequest, stream message.Message_ReceiveMessageServer) error {
-	// todo: add your logic here and delete this line
 
 	return nil
 }

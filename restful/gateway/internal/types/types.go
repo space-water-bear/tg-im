@@ -100,6 +100,39 @@ type LoginResponse struct {
 	Refresh int64  `json:"refresh"`
 }
 
+type MessageHistoryListRequest struct {
+	UserId int64 `url:"userId"`
+	Page   int32 `url:"page"`
+	Size   int32 `url:"size"`
+}
+
+type MessageHistoryListResponse struct {
+	Rows  []MessageInfo `json:"rows"`
+	Total int32         `json:"total"`
+}
+
+type MessageInfo struct {
+	MessageId  int64  `json:"messageId"`  // 消息ID
+	Types      int32  `json:"types"`      // 消息类型
+	Content    string `json:"content"`    // 消息内容
+	Timestamp  int64  `json:"timestamp"`  // 发送时间
+	SenderId   int64  `json:"senderId"`   // 发送者ID
+	ReceiverId int64  `json:"receiverId"` // 接收者ID
+}
+
+type MessageInfoRequest struct {
+	Types       string `json:"types,options=text|image|video|file|audio|location|merge|command|rich_text|markdown" form:"types,options=text|image|video|file|audio|location|merge|command|rich_text|markdown"` // 消息类型
+	Content     string `json:"content" form:"content"`                                                                                                                                                         // 消息内容
+	ContentSize int32  `json:"contentSize" form:"contentSize"`                                                                                                                                                 // 消息内容大小
+	Timestamp   int64  `json:"timestamp" form:"timestamp"`                                                                                                                                                     // 发送时间
+	ReceiverId  int64  `json:"receiverId" form:"receiverId"`                                                                                                                                                   // 接收者ID
+	ChatType    int32  `json:"chatType" form:"chatType"`                                                                                                                                                       // 聊天类型
+}
+
+type MessageInfoResponse struct {
+	Success bool `json:"success"`
+}
+
 type RegisterRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`

@@ -285,3 +285,53 @@ service gateway {
 	delete /group (DeleteGroupRequest) returns (GroupDeleteResponse)
 }
 
+type (
+	MessageInfo {
+		MessageId  int64  `json:"messageId"` // 消息ID
+		Types      int32  `json:"types"` // 消息类型
+		Content    string `json:"content"` // 消息内容
+		Timestamp  int64  `json:"timestamp"` // 发送时间
+		SenderId   int64  `json:"senderId"` // 发送者ID
+		ReceiverId int64  `json:"receiverId"` // 接收者ID
+	}
+	MessageInfoRequest {
+		Types       string `json:"types,options=text|image|video|file|audio|location|merge|command|rich_text|markdown" form:"types,options=text|image|video|file|audio|location|merge|command|rich_text|markdown"` // 消息类型
+		Content     string `json:"content" form:"content"` // 消息内容
+		ContentSize int32  `json:"contentSize" form:"contentSize"` // 消息内容大小
+		Timestamp   int64  `json:"timestamp" form:"timestamp"` // 发送时间
+		ReceiverId  int64  `json:"receiverId" form:"receiverId"` // 接收者ID
+		ChatType    int32  `json:"chatType" form:"chatType"` // 聊天类型
+	}
+	MessageInfoResponse {
+		Success bool `json:"success"`
+	}
+	MessageHistoryListRequest {
+		UserId int64 `url:"userId"`
+		Page   int32 `url:"page"`
+		Size   int32 `url:"size"`
+	}
+	MessageHistoryListResponse {
+		Rows  []MessageInfo `json:"rows"`
+		Total int32         `json:"total"`
+	}
+)
+
+@server (
+	prefix: /api/v1
+	group:  message
+	jwt:    Auth
+)
+service gateway {
+	@doc "Send message"
+	@handler MessageSend
+	post /message (MessageInfoRequest) returns (MessageInfoResponse)
+
+	@doc "Send file type message" // image|audio|video|file
+	@handler MessageFileSend
+	post /message/file returns (MessageInfoResponse)
+
+	@doc "Get message history"
+	@handler MessageHistory
+	get /message (MessageHistoryListRequest) returns (MessageHistoryListResponse)
+}
+

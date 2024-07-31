@@ -24,7 +24,10 @@ const (
 	ErrCheckSign = 10009
 	// ErrTokenInvalid token无效
 	ErrTokenInvalid = 10010
-
+	// ErrFileTooLarge 文件太大
+	ErrFileTooLarge = 10011
+	// ErrFileSave 文件保存失败
+	ErrFileSave = 10012
 	/*
 	 用户相关
 	*/
@@ -68,6 +71,8 @@ var ErrMsg = map[int32]string{
 	ErrSign:             "签名错误",
 	ErrCheckSign:        "签名校验错误",
 	ErrTokenInvalid:     "token无效",
+	ErrFileTooLarge:     "文件太大",
+	ErrFileSave:         "文件保存失败",
 
 	ErrUserNotFound:      "用户不存在",
 	ErrUserExist:         "用户已经存在",

@@ -20,8 +20,19 @@ Auth:
 NSQ:
   Host: "10.3.21.250:4161"
 
+
+Minio:
+  Endpoint: "10.3.21.250:9000"
+  AccessKeyID: "s37t1pc5TdICmdFpxokE"
+  SecretAccessKey: "cU2HOWHIeHk0P0lCYGmnPl2mzLCvlAWbxwEczIsF"
+  Bucket: "tg-im"
+  UseSSL: false
+
 UserRpc:
   Target: direct:///localhost:18001
 
 FriendsRpc:
   Target: direct:///localhost:18002
+
+MessageRpc:
+  Target: direct:///localhost:18003

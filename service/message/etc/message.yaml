@@ -1,9 +1,46 @@
 Name: message.rpc
-ListenOn: 0.0.0.0:8080
-Etcd:
-  Hosts:
-  - 127.0.0.1:2379
+ListenOn: 0.0.0.0:18003
+#Etcd:
+#  Hosts:
+#  - 127.0.0.1:2379
+#  Key: message.rpc
+Database:
+  Path: "10.3.21.250"
+  Port: 5432
+  Username: "postgres"
+  Password: "1234567890"
+  Dbname: "tg-im"
+  SslMode: "disable"
+  LogMode: "dev"
+  LogZap: true
+
+Redis:
+  Host: "10.3.21.250:6379"
+  Type: "node"
+  Pass: "guang123"
+  Tls: false
   Key: message.rpc
 
-NSQ:
+Nsq: # 消息队列配置
   Host: "10.3.21.250:4161"
+
+
+Log:
+  Level: "debug"
+  Mode: "console"
+  Path: "logs/service/message"
+
+UserRpc:
+  Target: direct:///localhost:18001
+#  Etcd:
+#    Hosts:
+#      - 127.0.0.1:2379
+#    Key: user.rpc
+
+FriendsRpc:
+  Target: direct:///localhost:18002
+#  Etcd:
+#    Hosts:
+#      - 127.0.0.1:2379
+#    Key: friends.rpc
+

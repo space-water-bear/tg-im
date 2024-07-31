@@ -1,0 +1,33 @@
+services:
+  nsqlookupd:
+    image: nsqio/nsq:latest
+    command:  nsqlookupd
+    ports:
+      - "4160:4160"
+      - "4161:4161"
+
+  nsqd1:
+    image: nsqio/nsq:latest
+    command: nsqd --broadcast-address=10.3.21.130 --lookupd-tcp-address=nsqlookupd:4160 --tcp-address=:4150 --http-address=:4151
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4150:4150"
+      - "4151:4151"
+
+  nsqd2:
+    image: nsqio/nsq:latest
+    command: nsqd --broadcast-address=10.3.21.130 --lookupd-tcp-address=nsqlookupd:4160 --tcp-address=:4150 --http-address=:4151
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4152:4150"
+      - "4153:4151"
+
+  nsqadmin:
+    image: nsqio/nsq:latest
+    command: nsqadmin --lookupd-http-address=nsqlookupd:4161
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "8282:4171"
