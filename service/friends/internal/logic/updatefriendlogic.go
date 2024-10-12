@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/mozillazg/go-pinyin"
 	"im2/internal/errno"
 	"im2/internal/utils"
 	"im2/service/friends/internal/model"
@@ -70,6 +71,11 @@ func (l *UpdateFriendLogic) UpdateFriend(in *friends.UpdateFriendRequest) (*frie
 		return &friends.UpdateFriendResponse{Code: errno.ErrDatabase}, nil
 	}
 
+	// 	提取拼音中首字母大写字母
+	p := pinyin.NewArgs()
+	py := pinyin.Pinyin(utils.TernaryIF(rest.Nickname != "", rest.Nickname, rest.Username), p) // [[zhong] [guo] [ren]]
+	friendPinyin := py[0][0][:1]
+
 	// 补充关系，即李四作为用户添加张三为好友
 	if err := l.svcCtx.Model.Insert(l.ctx, nil, &model.Friends{
 		UserId:         in.UserId,   // 李四
@@ -81,6 +87,7 @@ func (l *UpdateFriendLogic) UpdateFriend(in *friends.UpdateFriendRequest) (*frie
 		FriendAvatar:   sql.NullString{String: rest.Avatar, Valid: true},
 		Remark:         sql.NullString{String: "", Valid: true},
 		RequestStatus:  sql.NullBool{Bool: false, Valid: true},
+		FriendPinyin:   sql.NullString{String: friendPinyin, Valid: true},
 	}); err != nil {
 		return &friends.UpdateFriendResponse{Code: errno.ErrDatabase}, nil
 	}

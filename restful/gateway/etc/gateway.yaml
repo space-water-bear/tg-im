@@ -5,7 +5,7 @@ Timeout: 0
 Log:
   Level: "debug"
   Mode: "console"
-  Path: "logs/restful/user"
+  Path: "logs/restful/gateway"
 
 Redis:
   Host: "10.3.21.250:6379"

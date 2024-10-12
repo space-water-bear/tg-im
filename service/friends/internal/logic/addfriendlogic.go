@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/SpectatorNan/gorm-zero/gormc"
+	"github.com/mozillazg/go-pinyin"
 	"im2/internal/errno"
 	"im2/internal/utils"
 	"im2/service/friends/friends"
@@ -67,6 +68,11 @@ func (l *AddFriendLogic) AddFriend(in *friends.AddFriendRequest) (*friends.AddFr
 		}, nil
 	}
 
+	// 	提取拼音中首字母大写字母
+	p := pinyin.NewArgs()
+	py := pinyin.Pinyin(utils.TernaryIF(rest.Nickname != "", rest.Nickname, rest.Username), p) // [[zhong] [guo] [ren]]
+	friendPinyin := py[0][0][:1]
+
 	// 当前用户添加好友
 	err = l.svcCtx.Model.Insert(l.ctx, nil, &model.Friends{
 		UserId:         in.UserId,   // 张三
@@ -78,6 +84,7 @@ func (l *AddFriendLogic) AddFriend(in *friends.AddFriendRequest) (*friends.AddFr
 		FriendAvatar:   sql.NullString{String: rest.Avatar, Valid: true},
 		Remark:         sql.NullString{String: in.Remark, Valid: true},
 		RequestStatus:  sql.NullBool{Bool: true, Valid: true},
+		FriendPinyin:   sql.NullString{String: friendPinyin, Valid: true},
 	})
 	if err != nil {
 		return &friends.AddFriendResponse{

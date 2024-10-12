@@ -6,6 +6,7 @@ require (
 	github.com/SpectatorNan/gorm-zero v1.4.1
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/minio/minio-go/v7 v7.0.74
+	github.com/mozillazg/go-pinyin v0.20.0
 	github.com/nsqio/go-nsq v1.1.0
 	github.com/zeromicro/go-zero v1.6.5
 	golang.org/x/crypto v0.24.0

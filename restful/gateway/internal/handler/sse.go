@@ -89,8 +89,9 @@ func sseHandle(svcCtx *svc.ServiceContext) http.HandlerFunc {
 				handleClientDisconnect(r)
 				return false
 			case message := <-channel:
-				jsonData, _ := json.Marshal(message)
-				_, err := fmt.Fprintf(w, "data: %s\n\n", jsonData)
+				dt, _ := json.Marshal(message)
+				//dt, _ := utils.CompressMessage(message)
+				_, err := fmt.Fprintf(w, "data: %s\n\n", dt)
 				if err != nil {
 					fmt.Printf("Error writing to wr: %v\n", err)
 					handleClientDisconnect(r)

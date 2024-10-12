@@ -32,7 +32,7 @@ type (
 		Id               int64          `gorm:"column:id"`
 		UserId           int64          `gorm:"column:user_id"`
 		FriendId         int64          `gorm:"column:friend_id"`
-		Status           int64          `gorm:"column:status"` // 1.同意，2.等待，3.拒绝
+		Status           int64          `gorm:"column:status"` // 1.同意，2.等待，3.拒绝，4.黑名单
 		CreatedAt        time.Time      `gorm:"column:created_at"`
 		UpdatedAt        time.Time      `gorm:"column:updated_at"`
 		FriendNickname   string         `gorm:"column:friend_nickname"`
@@ -42,6 +42,7 @@ type (
 		RequestStatus    sql.NullBool   `gorm:"column:request_status"` // 是否请求
 		FriendUsername   string         `gorm:"column:friend_username"`
 		FriendEmail      sql.NullString `gorm:"column:friend_email"`
+		FriendPinyin     sql.NullString `gorm:"column:friend_pinyin"` // 昵称拼音首字母
 	}
 )
 
